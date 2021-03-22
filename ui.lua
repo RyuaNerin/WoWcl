@@ -58,7 +58,7 @@ do
     currentResult.activityID = entry.activityID
     currentResult.leaderName = entry.leaderName
 
-    WoWcl.Render(tooltip, currentResult.leaderName, nil, 1)
+    WoWcl.Render(tooltip, currentResult.leaderName, nil, 2)
   end
 
   local function HookApplicantButtons(buttons)
