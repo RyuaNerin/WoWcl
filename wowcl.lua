@@ -79,6 +79,7 @@ function WoWcl.Render(tooltip, name, realm, role)
     tooltip:AddLine(" ")
     tooltip:AddDoubleLine(zoneNames[1 + role], "로그 없음", 1, 1, 1, 0.8, 0.8, 0.8)
     tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+    tooltip:AddLine(" ")
     return
   end
 
@@ -88,7 +89,7 @@ function WoWcl.Render(tooltip, name, realm, role)
   if roles[2] >= 0 and IsControlKeyDown() then role = 1 end
   if roles[3] >= 0 and IsAltKeyDown()     then role = 2 end
 
-  local startPos = 2 + roles[role] * (1 + encounterCount) * 3
+  local startPos = 2 + roles[1 + role] * (1 + encounterCount) * 3
 
   tooltip:AddLine(" ")
   for i = 0, encounterCount do
@@ -134,4 +135,5 @@ function WoWcl.Render(tooltip, name, realm, role)
     )
   end
   tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+  tooltip:AddLine(" ")
 end
