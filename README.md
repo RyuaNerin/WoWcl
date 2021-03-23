@@ -6,6 +6,14 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 이 애드온은 [Affero General Public License v3](/LICENSE) 하에 배포됩니다
 
+## Toc
+
+- [주의사항](#주의사항)
+- [스크린샷](#스크린샷)
+- [사용 방법](#사용-방법)
+- [설치방법](#설치방법)
+    - [WowUp](#WowUp)
+
 ## 주의사항
 
 - WoWcl의 모든 사용자는 아래 항목을 준수해야 하며, 애드온 개발 기여자들은 그 어떤 피해도 책임지지 않습니다.
@@ -72,9 +80,9 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 ## 설치방법
 
-### wowup
+### WowUp
 
-1. [WoWup](//wowup.io) 을 설치합니다
+1. [WowUp](//wowup.io) 을 설치합니다
 
 2. **애드온 찾기** 탭으로 이동합니다
 
