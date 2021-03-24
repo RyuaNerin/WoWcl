@@ -41,8 +41,6 @@ end
 -- 파티찾기
 
 do
-  CreateFrame("GameTooltip", "WoWclLFGTooltip", nil, "GameTooltipTemplate")
-
   local currentResult = {}
   local hooked = {}
 
@@ -89,18 +87,18 @@ do
 
       local role = tank and 0 or (healer and 1 or 2)
 
-      local ownerSet, ownerExisted, ownerSetSame = SetOwnerSafely(WoWclLFGTooltip, self, "ANCHOR_NONE", 0, 0)
+      local ownerSet, ownerExisted, ownerSetSame = SetOwnerSafely(GameTooltip, self, "ANCHOR_NONE", 0, 0)
       if ownerSet and not ownerExisted and ownerSetSame then
-        WoWclLFGTooltip:Hide()
+        GameTooltip:Hide()
       end
 
-      WoWcl.Render(WoWclLFGTooltip, fullName, nil, role)
-      WoWclLFGTooltip:Show()
+      WoWcl.Render(GameTooltip, fullName, nil, role)
+      GameTooltip:Show()
     end
   end
 
   function OnLeave(self)
-    WoWclLFGTooltip:Hide()
+    GameTooltip:Hide()
   end
 
   hooksecurefunc("LFGListUtil_SetSearchEntryTooltip", SetSearchEntry)
