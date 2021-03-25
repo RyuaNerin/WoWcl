@@ -85,13 +85,12 @@ do
         return false
       end
 
-      local role = tank and 0 or (healer and 1 or 2)
-
       local ownerSet, ownerExisted, ownerSetSame = SetOwnerSafely(GameTooltip, self, "ANCHOR_NONE", 0, 0)
       if ownerSet and not ownerExisted and ownerSetSame then
         GameTooltip:Hide()
       end
 
+      local role = tank and 0 or (healer and 1 or 2)
       WoWcl.Render(GameTooltip, fullName, nil, role)
       GameTooltip:Show()
     end
