@@ -34,11 +34,15 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 ## 스크린샷
 
-![screenshot 1](README/screenshot_1.png)
+![screenshot](README/ss_me_min.png)
 
-![screenshot 2](README/screenshot_2.png)
+![screenshot](README/ss_me_detail.png)
 
-![screenshot 3](README/screenshot_3.png)
+![screenshot](README/ss_field_simple.png)
+
+![screenshot](README/ss_gf_list.png)
+
+파티 참가 신청 목록 (수락 거절하는 그 창) 에서도 확인 가능합니다.
 
 ## 사용 방법
 
