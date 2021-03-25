@@ -14,10 +14,10 @@ do
       local name, realm = UnitName(unit)
       local role = UnitGroupRolesAssigned(unit)
 
-      if     role == "TANK"    then role = 0
-      elseif role == "HEALER"  then role = 1
-      elseif role == "DAMAGER" then role = 2
-      else                          role = 2
+      if     role == "TANK"    then role =  0
+      elseif role == "HEALER"  then role =  1
+      elseif role == "DAMAGER" then role =  2
+      else                          role = -1
       end
 
       WoWcl.Render(self, name, realm, role)
@@ -56,7 +56,7 @@ do
     currentResult.activityID = entry.activityID
     currentResult.leaderName = entry.leaderName
 
-    WoWcl.Render(tooltip, currentResult.leaderName, nil, 2)
+    WoWcl.Render(tooltip, currentResult.leaderName, nil, -1)
   end
 
   local function HookApplicantButtons(buttons)
@@ -80,7 +80,7 @@ do
     if self.applicantID and self.Members then
       HookApplicantButtons(self.Members)
     elseif self.memberIdx then
-      local fullName, _, _, _, _, tank, healer, damage = C_LFGList.GetApplicantMemberInfo(self:GetParent().applicantID, self.memberIdx)
+      local fullName, _, _, _, _, tank, heal, deal = C_LFGList.GetApplicantMemberInfo(self:GetParent().applicantID, self.memberIdx)
       if not fullName then
         return false
       end
@@ -90,7 +90,13 @@ do
         GameTooltip:Hide()
       end
 
-      local role = tank and 0 or (healer and 1 or 2)
+      local role = -1
+
+      if     tank then role = 0
+      elseif heal then role = 1
+      elseif deal then role = 2
+      end
+
       WoWcl.Render(GameTooltip, fullName, nil, role)
       GameTooltip:Show()
     end

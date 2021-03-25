@@ -7,10 +7,11 @@ end
 
 local encounterCount = 10
 
-local zoneNames = {
-  "|cffffd800나스리아 성채 |r|TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:38:56:0:18|t", -- 탱
-  "|cffffd800나스리아 성채 |r|TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:19:37:0:18|t", -- 힐
-  "|cffffd800나스리아 성채 |r|TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:0:18:0:18|t",  -- 딜
+local headerNameOnDetail = {
+  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:38:56:0:18|t", -- 탱
+  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:19:37:0:18|t", -- 힐
+  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:0:18:0:18|t",  -- 딜
+  "|cffffd800나스리아 성채|r",
 }
 
 local encounterNames = {
@@ -72,12 +73,8 @@ function WoWcl.Render(tooltip, name, realm, role)
 
   local wcl_log = WoWcl.db[userName]
   if wcl_log == nil then
-    if IsShiftKeyDown()   then role = 0 end
-    if IsControlKeyDown() then role = 1 end
-    if IsAltKeyDown()     then role = 2 end
-
     tooltip:AddLine(" ")
-    tooltip:AddDoubleLine(zoneNames[1 + role], "로그 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+    tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
     tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
     tooltip:AddLine(" ")
     return
@@ -85,54 +82,143 @@ function WoWcl.Render(tooltip, name, realm, role)
 
   local roles = classRoleIndex[wcl_log[1]]
 
-  if roles[1] >= 0 and IsShiftKeyDown()   then role = 0 end
-  if roles[2] >= 0 and IsControlKeyDown() then role = 1 end
-  if roles[3] >= 0 and IsAltKeyDown()     then role = 2 end
-
-  local startPos = 2 + roles[1 + role] * (1 + encounterCount) * 3
-
   tooltip:AddLine(" ")
-  for i = 0, encounterCount do
-    local maxDifficulty = 1
+  if IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() then
+    ----------------------------------------------------------------------------------------------------
+    if IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() then
+      role = -1
+    else
+      if roles[1] >= 0 and IsShiftKeyDown()   then role = 0 end
+      if roles[2] >= 0 and IsControlKeyDown() then role = 1 end
+      if roles[3] >= 0 and IsAltKeyDown()     then role = 2 end
+    end
 
-    local scores = {
-      wcl_log[startPos + i * 3 + 0],
-      wcl_log[startPos + i * 3 + 1],
-      wcl_log[startPos + i * 3 + 2],
-    }
-    local scores_text = {
-      "- ",
-      "- ",
-      "- ",
-    };
+    if role == -1 then
+      -- 최고 클리어 난이도   탱  힐  딜
+      local maxDifficulty = { 1, 1, 1 }
+      local scores = {
+        { -1, -1, -1, -1 }, -- 탱
+        { -1, -1, -1, -1 }, -- 힐
+        { -1, -1, -1, -1 }, -- 딜
+      }
 
-    if scores[1] >= 0 then maxDifficulty = 2; scores_text[1] = format("%.1f", scores[1]) end;
-    if scores[2] >= 0 then maxDifficulty = 3; scores_text[2] = format("%.1f", scores[2]) end;
-    if scores[3] >= 0 then maxDifficulty = 4; scores_text[3] = format("%.1f", scores[3]) end;
+      scores[1][2] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 0]
+      scores[1][3] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 1]
+      scores[1][4] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 2]
 
-    scores_text[1] = format("%7s", scores_text[1])
-    scores_text[2] = format("%7s", scores_text[2])
-    scores_text[3] = format("%7s", scores_text[3])
+      scores[2][2] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 0]
+      scores[2][3] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 1]
+      scores[2][4] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 2]
 
-    tooltip:AddDoubleLine(
-      (
-        i == 0
-        and zoneNames[1 + role]
-        or  format(
-          "|cff%s%s|r",
-          difficultyColorHex[maxDifficulty],
-          encounterNames[i]
+      scores[3][2] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 0]
+      scores[3][3] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 1]
+      scores[3][4] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 2]
+
+      if     roles[1] >= 0 and scores[1][3] >= 0 then maxDifficulty[1] = 4
+      elseif roles[1] >= 0 and scores[1][2] >= 0 then maxDifficulty[1] = 3
+      elseif roles[1] >= 0 and scores[1][1] >= 0 then maxDifficulty[1] = 2
+      end
+
+      if     roles[2] >= 0 and scores[2][3] >= 0 then maxDifficulty[2] = 4
+      elseif roles[2] >= 0 and scores[2][2] >= 0 then maxDifficulty[2] = 3
+      elseif roles[2] >= 0 and scores[2][1] >= 0 then maxDifficulty[2] = 2
+      end
+
+      if     roles[3] >= 0 and scores[3][3] >= 0 then maxDifficulty[3] = 4
+      elseif roles[3] >= 0 and scores[3][2] >= 0 then maxDifficulty[3] = 3
+      elseif roles[3] >= 0 and scores[3][1] >= 0 then maxDifficulty[3] = 2
+      end
+
+      -- 탱
+      if     maxDifficulty[1] > 1 and maxDifficulty[1] > maxDifficulty[2] and maxDifficulty[1] > maxDifficulty[3] then role = 0 -- 탱
+      elseif maxDifficulty[2] > 1 and maxDifficulty[2] > maxDifficulty[1] and maxDifficulty[2] > maxDifficulty[3] then role = 1 -- 힐
+      elseif maxDifficulty[3] > 1 and maxDifficulty[3] > maxDifficulty[1] and maxDifficulty[3] > maxDifficulty[2] then role = 2 -- 딜
+      else
+        -- 가장 점수가 좋은 것
+        if     scores[1][maxDifficulty[1]] > scores[2][maxDifficulty[2]] and scores[1][maxDifficulty[1]] > scores[3][maxDifficulty[3]] then role = 0 -- 탱
+        elseif scores[2][maxDifficulty[2]] > scores[1][maxDifficulty[1]] and scores[2][maxDifficulty[2]] > scores[3][maxDifficulty[3]] then role = 1 -- 힐
+        elseif scores[3][maxDifficulty[3]] > scores[1][maxDifficulty[1]] and scores[3][maxDifficulty[3]] > scores[2][maxDifficulty[2]] then role = 2 -- 딜
+        else
+          role = 2 -- 딜러엔 실패없음
+        end
+      end
+    end
+
+    local startPos = 2 + roles[1 + role] * (1 + encounterCount) * 3
+
+    for i = 0, encounterCount do
+      local maxDifficulty = 1
+
+      local scores = {
+        wcl_log[startPos + i * 3 + 0],
+        wcl_log[startPos + i * 3 + 1],
+        wcl_log[startPos + i * 3 + 2],
+      }
+      local scores_text = {
+        "- ",
+        "- ",
+        "- ",
+      };
+
+      if scores[1] >= 0 then maxDifficulty = 2; scores_text[1] = format("%.1f", scores[1]) end;
+      if scores[2] >= 0 then maxDifficulty = 3; scores_text[2] = format("%.1f", scores[2]) end;
+      if scores[3] >= 0 then maxDifficulty = 4; scores_text[3] = format("%.1f", scores[3]) end;
+
+      scores_text[1] = format("%7s", scores_text[1])
+      scores_text[2] = format("%7s", scores_text[2])
+      scores_text[3] = format("%7s", scores_text[3])
+
+      tooltip:AddDoubleLine(
+        (
+          i == 0
+          and headerNameOnDetail[1 + role]
+          or  format(
+            "|cff%s%s|r",
+            difficultyColorHex[maxDifficulty],
+            encounterNames[i]
+          )
+        ),
+        format(
+          "|cff%s%s|r  |cff%s%s|r  |cff%s%s|r",
+          getColorHex(scores[1]), scores_text[1],
+          getColorHex(scores[2]), scores_text[2],
+          getColorHex(scores[3]), scores_text[3]
+        ),
+        1, 1, 1,
+        1, 1, 1
+      )
+    end
+  else
+    for role = 1, 3 do
+      if roles[role] >= 0 then
+        local scores = { 
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 0],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 1],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 2],
+        }
+        local scores_text = {
+          "- ",
+          "- ",
+          "- ",
+        };
+
+        if scores[1] >= 0 then scores_text[1] = format("%.1f", scores[1]) end;
+        if scores[2] >= 0 then scores_text[2] = format("%.1f", scores[2]) end;
+        if scores[3] >= 0 then scores_text[3] = format("%.1f", scores[3]) end;
+
+        tooltip:AddDoubleLine(
+          headerNameOnDetail[role],
+          format(
+            "|cff%s%7s|r  |cff%s%7s|r  |cff%s%7s|r",
+            getColorHex(scores[1]), scores_text[1],
+            getColorHex(scores[2]), scores_text[2],
+            getColorHex(scores[3]), scores_text[3]
+          ),
+          1, 1, 1,
+          1, 1, 1
         )
-      ),
-      format(
-        "|cff%s%s|r  |cff%s%s|r  |cff%s%s|r",
-        getColorHex(scores[1]), scores_text[1],
-        getColorHex(scores[2]), scores_text[2],
-        getColorHex(scores[3]), scores_text[3]
-      ),
-      1, 1, 1,
-      1, 1, 1
-    )
+      end
+    end
   end
   tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
   tooltip:AddLine(" ")
