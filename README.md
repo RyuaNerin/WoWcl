@@ -93,6 +93,10 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 2. **애드온 찾기** 탭으로 이동합니다
 
-3. URL 주소로 설치를 클릭합니다
+3. `WoWcl` 을 검색하여 다운로드 할 수 있습니다.
 
-4. 빈 칸에 `https://github.com/RyuaNerin/WoWcl` 를 입력합니다.
+### CurseForge
+
+- [여기](https://curseforge.overwolf.com/?addonId=461531)를 눌러 CurseForge 를 실행하여 애드온을 설치할 수 있습니다.
+
+- 혹은 `WoWcl` 을 검색하여 설치할 수 있습니다.
