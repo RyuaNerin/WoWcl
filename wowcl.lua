@@ -94,54 +94,64 @@ local function binSearch(data, name, startIndex, endIndex)
   end
 end
 
+local wclLogCache = {}
+
 function WoWcl.Render(tooltip, name, realm, role)
   if not realm then
     realm = GetRealmName()
   end
 
-  local realmData = WoWcl.db.server[realm]
-  if not realmData then
-    tooltip:AddLine(" ")
-    tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-    tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-    tooltip:AddLine(" ")
-    return
-  end
+  local cacheName = name .. "-" .. realm
 
-  local posIndex = binSearch(realmData, name, 2, #realmData)
-  if not posIndex then
-    tooltip:AddLine(" ")
-    tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-    tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-    tooltip:AddLine(" ")
-    return
-  end
-  posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
+  local wcl_log = wclLogCache[cacheName]
 
-  local posStrIndex = 1 + posIndex * 4
-  local scoreStart =  string.byte(string.sub(WoWcl.db.pos, posStrIndex + 0, posStrIndex + 0)) * 16777216 +
-                      string.byte(string.sub(WoWcl.db.pos, posStrIndex + 1, posStrIndex + 1)) * 65536 +
-                      string.byte(string.sub(WoWcl.db.pos, posStrIndex + 2, posStrIndex + 2)) * 256 +
-                      string.byte(string.sub(WoWcl.db.pos, posStrIndex + 3, posStrIndex + 3)) +
-                      1
-
-  local roles = classRoleIndex[string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))]
-
-  local scoreEnd = scoreStart + (roles[3] + 1) *  (1 + encounterCount) * 3 * 2
-
-  local wcl_log = {}
-  local wcl_log_index = 1
-  for i = scoreStart + 1, scoreEnd, 2 do
-    local v = string.byte(string.sub(WoWcl.db.score, i + 0, i + 0)) * 256 +
-              string.byte(string.sub(WoWcl.db.score, i + 1, i + 1))
-
-    if v == 0 then
-      wcl_log[wcl_log_index] = -1
-    else
-      wcl_log[wcl_log_index] = (v - 1) / 10.0
+  if not wcl_log then
+    local realmData = WoWcl.db.server[realm]
+    if not realmData then
+      tooltip:AddLine(" ")
+      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      tooltip:AddLine(" ")
+      return
     end
 
-    wcl_log_index = wcl_log_index + 1
+    local posIndex = binSearch(realmData, name, 2, #realmData)
+    if not posIndex then
+      tooltip:AddLine(" ")
+      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      tooltip:AddLine(" ")
+      return
+    end
+    posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
+
+    local posStrIndex = 1 + posIndex * 4
+    local scoreStart =  string.byte(string.sub(WoWcl.db.pos, posStrIndex + 0, posStrIndex + 0)) * 16777216 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 1, posStrIndex + 1)) * 65536 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 2, posStrIndex + 2)) * 256 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 3, posStrIndex + 3)) +
+                        1
+
+    wcl_log = {}
+    wcl_log[1] = classRoleIndex[string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))]
+
+    local scoreEnd = scoreStart + (roles[3] + 1) *  (1 + encounterCount) * 3 * 2
+
+    local wcl_log_index = 2
+    for i = scoreStart + 1, scoreEnd, 2 do
+      local v = string.byte(string.sub(WoWcl.db.score, i + 0, i + 0)) * 256 +
+                string.byte(string.sub(WoWcl.db.score, i + 1, i + 1))
+
+      if v == 0 then
+        wcl_log[wcl_log_index] = -1
+      else
+        wcl_log[wcl_log_index] = (v - 1) / 10.0
+      end
+
+      wcl_log_index = wcl_log_index + 1
+    end
+
+    wclLogCache[cacheName] = wcl_log
   end
 
   tooltip:AddLine(" ")
@@ -164,17 +174,17 @@ function WoWcl.Render(tooltip, name, realm, role)
         { -1, -1, -1, -1 }, -- 딜
       }
 
-      scores[1][2] = wcl_log[1 + roles[1] * (1 + encounterCount) * 3 + 0]
-      scores[1][3] = wcl_log[1 + roles[1] * (1 + encounterCount) * 3 + 1]
-      scores[1][4] = wcl_log[1 + roles[1] * (1 + encounterCount) * 3 + 2]
+      scores[1][2] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 0]
+      scores[1][3] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 1]
+      scores[1][4] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 2]
 
-      scores[2][2] = wcl_log[1 + roles[2] * (1 + encounterCount) * 3 + 0]
-      scores[2][3] = wcl_log[1 + roles[2] * (1 + encounterCount) * 3 + 1]
-      scores[2][4] = wcl_log[1 + roles[2] * (1 + encounterCount) * 3 + 2]
+      scores[2][2] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 0]
+      scores[2][3] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 1]
+      scores[2][4] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 2]
 
-      scores[3][2] = wcl_log[1 + roles[3] * (1 + encounterCount) * 3 + 0]
-      scores[3][3] = wcl_log[1 + roles[3] * (1 + encounterCount) * 3 + 1]
-      scores[3][4] = wcl_log[1 + roles[3] * (1 + encounterCount) * 3 + 2]
+      scores[3][2] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 0]
+      scores[3][3] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 1]
+      scores[3][4] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 2]
 
       if     roles[1] >= 0 and scores[1][3] >= 0 then maxDifficulty[1] = 4
       elseif roles[1] >= 0 and scores[1][2] >= 0 then maxDifficulty[1] = 3
@@ -206,7 +216,7 @@ function WoWcl.Render(tooltip, name, realm, role)
       end
     end
 
-    local startPos = 1 + roles[1 + role] * (1 + encounterCount) * 3
+    local startPos = 2 + roles[1 + role] * (1 + encounterCount) * 3
 
     for i = 0, encounterCount do
       local maxDifficulty = 1
