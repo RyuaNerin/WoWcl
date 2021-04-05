@@ -1,5 +1,7 @@
 # WoWcl
 
+![GitHub all releases](https://img.shields.io/github/downloads/RyuaNerin/WoWcl/total?style=for-the-badge)
+
 WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도록 도와주는 애드온입니다.
 
 사용 전 반드시 본 메뉴얼을 숙지하여 주십시오.
