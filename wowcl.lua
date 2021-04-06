@@ -270,9 +270,9 @@ function WoWcl.Render(tooltip, name, realm, role)
     for role = 1, 3 do
       if roles[role] >= 0 then
         local scores = { 
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 0],
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 1],
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 2],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 0],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 1],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 2],
         }
         local scores_text = {
           "- ",
