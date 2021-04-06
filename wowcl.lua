@@ -105,6 +105,8 @@ function WoWcl.Render(tooltip, name, realm, role)
 
   local wcl_log = wclLogCache[cacheName]
 
+  local roles
+
   if not wcl_log then
     local realmData = WoWcl.db.server[realm]
     if not realmData then
@@ -133,7 +135,9 @@ function WoWcl.Render(tooltip, name, realm, role)
                         1
 
     wcl_log = {}
-    wcl_log[1] = classRoleIndex[string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))]
+    wcl_log[1] = string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))
+
+    roles = classRoleIndex[wcl_log[1]]
 
     local scoreEnd = scoreStart + (roles[3] + 1) *  (1 + encounterCount) * 3 * 2
 
@@ -153,6 +157,8 @@ function WoWcl.Render(tooltip, name, realm, role)
 
     wclLogCache[cacheName] = wcl_log
   end
+
+  roles = classRoleIndex[wcl_log[1]]
 
   tooltip:AddLine(" ")
   if IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() then
@@ -264,9 +270,9 @@ function WoWcl.Render(tooltip, name, realm, role)
     for role = 1, 3 do
       if roles[role] >= 0 then
         local scores = { 
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 0],
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 1],
-          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 2],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 0],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 1],
+          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 2],
         }
         local scores_text = {
           "- ",
