@@ -5,8 +5,6 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-local encounterCount = 10
-
 local headerNameOnDetail = {
   "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:38:56:0:18|t", -- 탱
   "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:19:37:0:18|t", -- 힐
@@ -14,6 +12,7 @@ local headerNameOnDetail = {
   "|cffffd800나스리아 성채|r",
 }
 
+local encounterCount = 10
 local encounterNames = {
   "절규날개",
   "사냥꾼 알티모르",
@@ -28,7 +27,7 @@ local encounterNames = {
 }
 
 local classRoleIndex = {
-  --    탱  힐  딜
+  --       탱  힐  딜
   [ 1] = {  0, -1,  1, }, -- 죽기
   [ 2] = {  0,  1,  2, }, -- 드루이드
   [ 3] = { -1, -1,  0, }, -- 사냥꾼
@@ -62,25 +61,104 @@ local function getColorHex(percentage)
 end
 
 ----------------------------------------------------------------------------------------------------
+local function dump(tbl, indent)
+  if not indent then indent = 0 end
+  for k, v in pairs(tbl) do
+    formatting = string.rep("  ", indent) .. k .. ": "
+    if type(v) == "table" then
+      print(formatting)
+      tprint(v, indent+1)
+    elseif type(v) == 'boolean' then
+      print(formatting .. tostring(v))		
+    else
+      print(formatting .. v)
+    end
+  end
+end
+
+local function binSearch(data, name, startIndex, endIndex)
+  local minIndex = startIndex
+  local maxIndex = endIndex
+  local mid, current
+
+  while minIndex <= maxIndex do
+      mid = floor((maxIndex + minIndex) / 2)
+      current = data[mid]
+      if current == name then
+          return mid
+      elseif current < name then
+          minIndex = mid + 1
+      else
+          maxIndex = mid - 1
+      end
+  end
+end
+
+local wclLogCache = {}
 
 function WoWcl.Render(tooltip, name, realm, role)
-  local userName = name
-  if not string.find(name, "-") then
-    userName = realm
-      and name.."-"..realm
-      or  name.."-"..GetRealmName()
+  if not realm then
+    realm = GetRealmName()
   end
 
-  local wcl_log = WoWcl.db[userName]
-  if wcl_log == nil then
-    tooltip:AddLine(" ")
-    tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-    tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-    tooltip:AddLine(" ")
-    return
+  local cacheName = name .. "-" .. realm
+
+  local wcl_log = wclLogCache[cacheName]
+
+  local roles
+
+  if not wcl_log then
+    local realmData = WoWcl.db.server[realm]
+    if not realmData then
+      tooltip:AddLine(" ")
+      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      tooltip:AddLine(" ")
+      return
+    end
+
+    local posIndex = binSearch(realmData, name, 2, #realmData)
+    if not posIndex then
+      tooltip:AddLine(" ")
+      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      tooltip:AddLine(" ")
+      return
+    end
+    posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
+
+    local posStrIndex = 1 + posIndex * 4
+    local scoreStart =  string.byte(string.sub(WoWcl.db.pos, posStrIndex + 0, posStrIndex + 0)) * 16777216 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 1, posStrIndex + 1)) * 65536 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 2, posStrIndex + 2)) * 256 +
+                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 3, posStrIndex + 3)) +
+                        1
+
+    wcl_log = {}
+    wcl_log[1] = string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))
+
+    roles = classRoleIndex[wcl_log[1]]
+
+    local scoreEnd = scoreStart + (roles[3] + 1) *  (1 + encounterCount) * 3 * 2
+
+    local wcl_log_index = 2
+    for i = scoreStart + 1, scoreEnd, 2 do
+      local v = string.byte(string.sub(WoWcl.db.score, i + 0, i + 0)) * 256 +
+                string.byte(string.sub(WoWcl.db.score, i + 1, i + 1))
+
+      if v == 0 then
+        wcl_log[wcl_log_index] = -1
+      else
+        wcl_log[wcl_log_index] = (v - 1) / 10.0
+      end
+
+      wcl_log_index = wcl_log_index + 1
+    end
+
+    wclLogCache[cacheName] = wcl_log
   end
 
-  local roles = classRoleIndex[wcl_log[1]]
+  roles = classRoleIndex[wcl_log[1]]
 
   tooltip:AddLine(" ")
   if IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() then
@@ -192,9 +270,9 @@ function WoWcl.Render(tooltip, name, realm, role)
     for role = 1, 3 do
       if roles[role] >= 0 then
         local scores = { 
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 0],
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 1],
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 2],
+          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 0],
+          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 1],
+          wcl_log[1 + roles[role] * (1 + encounterCount) * 3 + 2],
         }
         local scores_text = {
           "- ",
@@ -220,6 +298,6 @@ function WoWcl.Render(tooltip, name, realm, role)
       end
     end
   end
-  tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[0], 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+  tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
   tooltip:AddLine(" ")
 end

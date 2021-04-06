@@ -1,8 +1,12 @@
 # WoWcl
 
+![GitHub all releases](https://img.shields.io/github/downloads/RyuaNerin/WoWcl/total?style=for-the-badge)
+
 WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도록 도와주는 애드온입니다.
 
 사용 전 반드시 본 메뉴얼을 숙지하여 주십시오.
+
+**얼라이언스는 지원하지 않으며, 지원 예정 또한 없습니다.**
 
 이 애드온은 [Affero General Public License v3](/LICENSE) 하에 배포됩니다
 
@@ -28,7 +32,7 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 - 따라서 **로그 점수는 개개인의 공략 이해, 숙련 또는 숙련도를 판단하는 척도가 되지 못합니다.**
 
-- WoWcl 은 매주 **목, 금, 토, 일요일**에 로그 정보를 가져오고, 정보를 가져오는 대로 애드온 업데이트에 반영됩니다.
+- WoWcl 은 **매일 12시부터 갱신을 시작해 약 7~8시 사이에 애드온에 반영**됩니다.
 
 - **본 애드온의 업데이트는 예고 없이 중단될 수 있습니다.**
 
@@ -63,6 +67,7 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
     |`Shift + Control + Alt`|최고 성적 역할군의 세부 로그|
 
 - 보스 이름의 색상 배정은 아래와 같습니다.
+
     |최대 클리어|색|
     |:-:|:-:|
     |신화|노란색|
@@ -71,6 +76,7 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
     |기록 없음|회색|
 
 - 로그 점수 색 배정은 아래와 같습니다. (WarcraftLogs 와 동일하지만 조금 더 밝음)
+
     |범위|색|
     |:-:|-|
     |`100`|노란색|
@@ -89,6 +95,10 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 2. **애드온 찾기** 탭으로 이동합니다
 
-3. URL 주소로 설치를 클릭합니다
+3. `WoWcl` 을 검색하여 다운로드 할 수 있습니다.
 
-4. 빈 칸에 `https://github.com/RyuaNerin/WoWcl` 를 입력합니다.
+### CurseForge
+
+- [여기](https://curseforge.overwolf.com/?addonId=461531)를 눌러 CurseForge 를 실행하여 애드온을 설치할 수 있습니다.
+
+- 혹은 `WoWcl` 을 검색하여 설치할 수 있습니다.
