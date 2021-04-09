@@ -12,7 +12,5 @@ local function onEvent(self,event,arg)
   end
 end
 
-
-
 eventframe:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventframe:SetScript("OnEvent", onEvent)
