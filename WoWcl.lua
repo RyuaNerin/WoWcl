@@ -139,14 +139,14 @@ function WoWcl.Render(tooltip, name, realm, role)
     end
     posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
 
-    local scoreStart =  toInt(WoWcl.db.pos, 1 + posIndex * 3, 3) + 1
-    
+    local scoreStart = 1 + toInt(WoWcl.db.pos, 1 + posIndex * 3, 3)
+
     wcl_log = {}
     wcl_log[1] = toInt(WoWcl.db.score, scoreStart, 1)
 
     roles = classRoleIndex[wcl_log[1]]
 
-    local scoreEnd = scoreStart + (roles[3] + 1) *  (1 + encounterCount) * 3 * 2
+    local scoreEnd = scoreStart + (roles[3] + 1) * (1 + encounterCount) * 3 * 2
 
     local wcl_log_index = 2
     for i = scoreStart + 1, scoreEnd, 2 do
