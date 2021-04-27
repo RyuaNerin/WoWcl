@@ -60,6 +60,18 @@ local function getColorHex(percentage)
                             return "888888"
 end
 
+local function toInt(data, index, length)
+  local value = 0
+  local p = 1
+
+  for i = length - 1, 0, -1 do
+    value = value + string.byte(string.sub(data, index + i, index + i)) * p
+    p = p * 256
+  end
+
+  return value
+end
+
 ----------------------------------------------------------------------------------------------------
 local function dump(tbl, indent)
   if not indent then indent = 0 end
@@ -127,15 +139,10 @@ function WoWcl.Render(tooltip, name, realm, role)
     end
     posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
 
-    local posStrIndex = 1 + posIndex * 4
-    local scoreStart =  string.byte(string.sub(WoWcl.db.pos, posStrIndex + 0, posStrIndex + 0)) * 16777216 +
-                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 1, posStrIndex + 1)) * 65536 +
-                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 2, posStrIndex + 2)) * 256 +
-                        string.byte(string.sub(WoWcl.db.pos, posStrIndex + 3, posStrIndex + 3)) +
-                        1
-
+    local scoreStart =  toInt(WoWcl.db.pos, 1 + posIndex * 3, 3) + 1
+    
     wcl_log = {}
-    wcl_log[1] = string.byte(string.sub(WoWcl.db.score, scoreStart, scoreStart))
+    wcl_log[1] = toInt(WoWcl.db.score, scoreStart, 1)
 
     roles = classRoleIndex[wcl_log[1]]
 
@@ -143,8 +150,7 @@ function WoWcl.Render(tooltip, name, realm, role)
 
     local wcl_log_index = 2
     for i = scoreStart + 1, scoreEnd, 2 do
-      local v = string.byte(string.sub(WoWcl.db.score, i + 0, i + 0)) * 256 +
-                string.byte(string.sub(WoWcl.db.score, i + 1, i + 1))
+      local v = toInt(WoWcl.db.score, i, 2)
 
       if v == 0 then
         wcl_log[wcl_log_index] = -1
