@@ -6,7 +6,6 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 사용 전 반드시 본 메뉴얼을 숙지하여 주십시오.
 
-**얼라이언스는 지원하지 않으며, 지원 예정 또한 없습니다.**
 
 이 애드온은 [Affero General Public License v3](/LICENSE) 하에 배포됩니다
 
@@ -102,3 +101,9 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 - [여기](https://curseforge.overwolf.com/?addonId=461531)를 눌러 CurseForge 를 실행하여 애드온을 설치할 수 있습니다.
 
 - 혹은 `WoWcl` 을 검색하여 설치할 수 있습니다.
+
+## 얼라이언스 지원
+
+**~~얼라이언스는 지원하지 않으며, 지원 예정 또한 없습니다.~~**
+
+![얼라이언스 지원](README/never.gif)
