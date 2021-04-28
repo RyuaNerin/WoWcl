@@ -106,4 +106,4 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 **~~얼라이언스는 지원하지 않으며, 지원 예정 또한 없습니다.~~**
 
-    ![얼라이언스 지원](README/never.gif)
+![얼라이언스 지원](README/never.gif)
