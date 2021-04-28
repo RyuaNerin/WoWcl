@@ -1,0 +1,9 @@
+## Interface: 90005
+## Title: WoWcl (Korea - Alliance)
+## Author: RyuaNerin (https://ryuar.in/, 경력직자택경비원-아즈샤라)
+## Dependencies: WoWcl
+## DefaultState: enabled
+## X-Region: Korea
+## X-Faction: Alliance
+## X-Website: https://wowcl.ryuar.in/
+../WoWcl/db/kr_alliance.lua
