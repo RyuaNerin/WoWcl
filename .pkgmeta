@@ -1,0 +1,8 @@
+package-as: WoWcl
+
+move-folders:
+	WoWcl/db/WoWcl_DB_KR_A: WoWcl_DB_KR_A
+	WoWcl/db/WoWcl_DB_KR_H: WoWcl_DB_KR_H
+
+ignore:
+	- CNAME
