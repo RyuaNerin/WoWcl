@@ -2,12 +2,13 @@
 ## Title: WoWcl
 ## Notes: 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도록 도와주는 애드온
 ## Author: RyuaNerin (https://ryuar.in/, 경력직자택경비원-아즈샤라)
-## Version: 2021.04.28.0503
+## Version: 2021.04.29.0123
 ## DefaultState: enabled
 ## X-Website: https://wowcl.ryuar.in/
 ## X-AddonProvider: github
 
 WoWcl.lua
+db\kr_horde.lua
 utils.lua
 ui.lua
 notice.lua
