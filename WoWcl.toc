@@ -8,7 +8,6 @@
 ## X-AddonProvider: github
 
 WoWcl.lua
-db\kr_horde.lua
 utils.lua
 ui.lua
 notice.lua
