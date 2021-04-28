@@ -6,24 +6,10 @@ end
 ----------------------------------------------------------------------------------------------------
 
 local headerNameOnDetail = {
-  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:38:56:0:18|t", -- 탱
-  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:19:37:0:18|t", -- 힐
-  "|cffffd800나스리아 성채|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:0:18:0:18|t",  -- 딜
-  "|cffffd800나스리아 성채|r",
-}
-
-local encounterCount = 10
-local encounterNames = {
-  "절규날개",
-  "사냥꾼 알티모르",
-  "굶주린 파괴자",
-  "태양왕의 구원",
-  "기술자 자이목스",
-  "귀부인 미네르바 다크베인",
-  "혈기의 의회",
-  "진흙주먹",
-  "돌 군단 장군",
-  "대영주 데나트리우스",
+  "|cffffd800%s|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:38:56:0:18|t", -- 탱
+  "|cffffd800%s|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:19:37:0:18|t", -- 힐
+  "|cffffd800%s|r |TInterface\\AddOns\\WoWcl\\icons\\roles:14:14:0:0:64:64:0:18:0:18|t",  -- 딜
+  "|cffffd800%s|r",
 }
 
 local classRoleIndex = {
@@ -76,12 +62,12 @@ end
 local function dump(tbl, indent)
   if not indent then indent = 0 end
   for k, v in pairs(tbl) do
-    formatting = string.rep("  ", indent) .. k .. ": "
+    local formatting = string.rep("  ", indent) .. k .. ": "
     if type(v) == "table" then
       print(formatting)
-      tprint(v, indent+1)
+      dump(v, indent+1)
     elseif type(v) == 'boolean' then
-      print(formatting .. tostring(v))		
+      print(formatting .. tostring(v))
     else
       print(formatting .. v)
     end
@@ -123,7 +109,7 @@ function WoWcl.Render(tooltip, name, realm, role)
     local realmData = WoWcl.db.server[realm]
     if not realmData then
       tooltip:AddLine(" ")
-      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine(format(headerNameOnDetail[4], WoWcl.db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
       tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
       tooltip:AddLine(" ")
       return
@@ -132,7 +118,7 @@ function WoWcl.Render(tooltip, name, realm, role)
     local posIndex = binSearch(realmData, name, 2, #realmData)
     if not posIndex then
       tooltip:AddLine(" ")
-      tooltip:AddDoubleLine(headerNameOnDetail[4], "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
+      tooltip:AddDoubleLine(format(headerNameOnDetail[4], WoWcl.db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
       tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
       tooltip:AddLine(" ")
       return
@@ -146,7 +132,7 @@ function WoWcl.Render(tooltip, name, realm, role)
 
     roles = classRoleIndex[wcl_log[1]]
 
-    local scoreEnd = scoreStart + (roles[3] + 1) * (1 + encounterCount) * 3 * 2
+    local scoreEnd = scoreStart + (roles[3] + 1) * (1 + WoWcl.db.WoWcl.db.encounterCount) * 3 * 2
 
     local wcl_log_index = 2
     for i = scoreStart + 1, scoreEnd, 2 do
@@ -186,17 +172,17 @@ function WoWcl.Render(tooltip, name, realm, role)
         { -1, -1, -1, -1 }, -- 딜
       }
 
-      scores[1][2] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 0]
-      scores[1][3] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 1]
-      scores[1][4] = wcl_log[2 + roles[1] * (1 + encounterCount) * 3 + 2]
+      scores[1][2] = wcl_log[2 + roles[1] * (1 + WoWcl.db.encounterCount) * 3 + 0]
+      scores[1][3] = wcl_log[2 + roles[1] * (1 + WoWcl.db.encounterCount) * 3 + 1]
+      scores[1][4] = wcl_log[2 + roles[1] * (1 + WoWcl.db.encounterCount) * 3 + 2]
 
-      scores[2][2] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 0]
-      scores[2][3] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 1]
-      scores[2][4] = wcl_log[2 + roles[2] * (1 + encounterCount) * 3 + 2]
+      scores[2][2] = wcl_log[2 + roles[2] * (1 + WoWcl.db.encounterCount) * 3 + 0]
+      scores[2][3] = wcl_log[2 + roles[2] * (1 + WoWcl.db.encounterCount) * 3 + 1]
+      scores[2][4] = wcl_log[2 + roles[2] * (1 + WoWcl.db.encounterCount) * 3 + 2]
 
-      scores[3][2] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 0]
-      scores[3][3] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 1]
-      scores[3][4] = wcl_log[2 + roles[3] * (1 + encounterCount) * 3 + 2]
+      scores[3][2] = wcl_log[2 + roles[3] * (1 + WoWcl.db.encounterCount) * 3 + 0]
+      scores[3][3] = wcl_log[2 + roles[3] * (1 + WoWcl.db.encounterCount) * 3 + 1]
+      scores[3][4] = wcl_log[2 + roles[3] * (1 + WoWcl.db.encounterCount) * 3 + 2]
 
       if     roles[1] >= 0 and scores[1][3] >= 0 then maxDifficulty[1] = 4
       elseif roles[1] >= 0 and scores[1][2] >= 0 then maxDifficulty[1] = 3
@@ -228,9 +214,9 @@ function WoWcl.Render(tooltip, name, realm, role)
       end
     end
 
-    local startPos = 2 + roles[1 + role] * (1 + encounterCount) * 3
+    local startPos = 2 + roles[1 + role] * (1 + WoWcl.db.encounterCount) * 3
 
-    for i = 0, encounterCount do
+    for i = 0, WoWcl.db.encounterCount do
       local maxDifficulty = 1
 
       local scores = {
@@ -255,11 +241,11 @@ function WoWcl.Render(tooltip, name, realm, role)
       tooltip:AddDoubleLine(
         (
           i == 0
-          and headerNameOnDetail[1 + role]
+          and format(headerNameOnDetail[1 + role], WoWcl.db.zoneName)
           or  format(
             "|cff%s%s|r",
             difficultyColorHex[maxDifficulty],
-            encounterNames[i]
+            WoWcl.db.encounterNames[i]
           )
         ),
         format(
@@ -276,9 +262,9 @@ function WoWcl.Render(tooltip, name, realm, role)
     for role = 1, 3 do
       if roles[role] >= 0 then
         local scores = { 
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 0],
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 1],
-          wcl_log[2 + roles[role] * (1 + encounterCount) * 3 + 2],
+          wcl_log[2 + roles[role] * (1 + WoWcl.db.encounterCount) * 3 + 0],
+          wcl_log[2 + roles[role] * (1 + WoWcl.db.encounterCount) * 3 + 1],
+          wcl_log[2 + roles[role] * (1 + WoWcl.db.encounterCount) * 3 + 2],
         }
         local scores_text = {
           "- ",
@@ -291,7 +277,7 @@ function WoWcl.Render(tooltip, name, realm, role)
         if scores[3] >= 0 then scores_text[3] = format("%.1f", scores[3]) end;
 
         tooltip:AddDoubleLine(
-          headerNameOnDetail[role],
+          format(headerNameOnDetail[role], WoWcl.db.zoneName),
           format(
             "|cff%s%7s|r  |cff%s%7s|r  |cff%s%7s|r",
             getColorHex(scores[1]), scores_text[1],
