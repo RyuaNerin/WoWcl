@@ -47,11 +47,18 @@ local function getColorHex(percentage)
 end
 
 local function toInt(data, index, length)
+  local k = string.byte(string.sub(data, 1, 1))
+  local v = 0
   local value = 0
   local p = 1
 
   for i = length - 1, 0, -1 do
-    value = value + string.byte(string.sub(data, index + i, index + i)) * p
+    v = string.byte(string.sub(data, 1 + index + i, 1 + index + i)) + (256 - k)
+    if v >= 256 then
+      v = v - 256
+    end
+
+    value = value + v * p
     p = p * 256
   end
 
@@ -95,6 +102,10 @@ end
 local wclLogCache = {}
 
 function WoWcl.Render(tooltip, name, realm, role)
+  if not WoWcl.db then
+    return
+  end
+
   if not realm then
     realm = GetRealmName()
   end
@@ -132,7 +143,7 @@ function WoWcl.Render(tooltip, name, realm, role)
 
     roles = classRoleIndex[wcl_log[1]]
 
-    local scoreEnd = scoreStart + (roles[3] + 1) * (1 + WoWcl.db.WoWcl.db.encounterCount) * 3 * 2
+    local scoreEnd = scoreStart + (roles[3] + 1) * (1 + WoWcl.db.encounterCount) * 3 * 2
 
     local wcl_log_index = 2
     for i = scoreStart + 1, scoreEnd, 2 do
