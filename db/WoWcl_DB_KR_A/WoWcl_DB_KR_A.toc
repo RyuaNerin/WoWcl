@@ -6,4 +6,4 @@
 ## X-Region: Korea
 ## X-Faction: Alliance
 ## X-Website: https://wowcl.ryuar.in/
-../WoWcl/db/kr_alliance.lua
+..\WoWcl\db\kr_alliance.lua

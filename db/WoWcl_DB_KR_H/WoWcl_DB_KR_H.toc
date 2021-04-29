@@ -6,4 +6,4 @@
 ## X-Region: Korea
 ## X-Faction: Horde
 ## X-Website: https://wowcl.ryuar.in/
-../WoWcl/db/kr_horde.lua
+..\WoWcl\db\kr_horde.lua
