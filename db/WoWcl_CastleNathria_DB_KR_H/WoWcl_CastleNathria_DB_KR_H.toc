@@ -1,9 +1,9 @@
 ## Interface: 90100
-## Title: WoWcl (Korea - Alliance)
+## Title: WoWcl (Korea - Horde, Castle Nathria v9.05)
 ## Author: RyuaNerin (https://ryuar.in/, 경력직자택경비원-아즈샤라)
 ## Dependencies: WoWcl
 ## DefaultState: enabled
 ## X-Region: Korea
-## X-Faction: Alliance
+## X-Faction: Horde
 ## X-Website: https://wowcl.ryuar.in/
-..\WoWcl\db\kr_alliance.lua
+..\WoWcl_CastleNathria\db\kr_alliance.lua
