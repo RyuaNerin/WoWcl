@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: WoWcl (Korea - Horde)
 ## Author: RyuaNerin (https://ryuar.in/, 경력직자택경비원-아즈샤라)
 ## Dependencies: WoWcl
