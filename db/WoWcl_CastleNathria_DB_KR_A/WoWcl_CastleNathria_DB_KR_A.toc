@@ -6,4 +6,4 @@
 ## X-Region: Korea
 ## X-Faction: Alliance
 ## X-Website: https://wowcl.ryuar.in/
-..\WoWcl_CastleNathria\db\kr_horde.lua
+kr_alliance.lua
