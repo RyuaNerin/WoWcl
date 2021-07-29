@@ -1,4 +1,4 @@
-local db={version="2021-07-28 04:12:04",zoneName="나스리아 성채",encounterCount=10,encounterNames={},server={},pos=nil,score=nil}
+local db={version="v9.05",zoneName="나스리아 성채",encounterCount=10,encounterNames={},server={},pos=nil,score=nil}
 local F=function()
 db.encounterNames[2]="사냥꾼 알티모르"
 db.encounterNames[5]="기술자 자이목스"
