@@ -7,6 +7,8 @@
 		- [CurseForge](#CurseForge)
 	- [문의](#문의)
 
+[인벤 게시글](https://www.inven.co.kr/board/wow/17/37268)
+
 # WoWcl
 
 ![GitHub all releases](https://img.shields.io/github/downloads/RyuaNerin/WoWcl/total?style=for-the-badge)
@@ -17,11 +19,11 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 이 애드온은 [Affero General Public License v3](LICENSE) 하에 배포됩니다
 
-![screenshot](README/ss_me_min.png)
+![screenshot](README/ss_me_min.jpg)
 
-![screenshot](README/ss_me_detail.png)
+![screenshot](README/ss_me_detail.jpg)
 
-![screenshot](README/ss_gf_list.png)
+![screenshot](README/ss_gf_list.jpg)
 
 ## 주의사항
 
@@ -60,12 +62,12 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 	- 네임드 별 로그를 보고싶으시면 `Shift`, `Control`, `Alt` 를 활용해주세요.
 
-    |단축키|설명|
-    |:-:|:-:|
-    |`Shift`|보스별 탱커 dps 로그|
-    |`Control`|보스별 힐러 hps 로그|
-    |`Alt`|보스별 딜러 dps 로그|
-    |`Shift + Control + Alt`|최고 성적 역할군의 세부 로그|
+		|단축키|설명|
+		|:-:|:-:|
+		|`Shift`|보스별 탱커 dps 로그|
+		|`Control`|보스별 힐러 hps 로그|
+		|`Alt`|보스별 딜러 dps 로그|
+		|`Shift + Control + Alt`|최고 성적 역할군의 세부 로그|
 
 - 로그 점수 색은 **WarcraftLogs 에서 사용되는 색과 동일**합니다
 
@@ -107,11 +109,11 @@ WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도
 
 ### CurseForge
 
-- [여기](https://curseforge.overwolf.com/?addonId=461531)를 눌러 CurseForge 를 실행하여 애드온을 설치할 수 있습니다.
+- [**여기**](https://curseforge.overwolf.com/?addonId=461531)를 눌러 CurseForge 를 실행하여 애드온을 설치할 수 있습니다.
 
 - 혹은 `WoWcl` 을 검색하여 설치할 수 있습니다.
 
-- 나스리아 성채 데이터가 필요하신 경우 [여기](https://curseforge.overwolf.com/?addonId=508680)를 눌러 **WoWcl - Castle Nathria** 를 설치해주세요
+- 나스리아 성채 데이터가 필요하신 경우 [**여기**](https://curseforge.overwolf.com/?addonId=508680)를 눌러 `WoWcl - Castle Nathria` 를 설치해주세요
 
 ## 문의
 
