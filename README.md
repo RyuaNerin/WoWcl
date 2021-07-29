@@ -15,9 +15,11 @@
 
 WowCl 은 인게임에서 쉽게 WarcraftLogs 의 점수를 조회할 수 있도록 도와주는 애드온입니다.
 
-사용 전 반드시 본 메뉴얼을 숙지하여 주십시오.
+- 사용 전 반드시 본 메뉴얼을 숙지하여 주십시오.
 
-이 애드온은 [Affero General Public License v3](LICENSE) 하에 배포됩니다
+- 이 애드온은 [Affero General Public License v3](LICENSE) 하에 배포됩니다
+
+- 제작 : 류아네린 (RyuaNerin, RyuaRin)
 
 ![screenshot](README/ss_me_min.jpg)
 
