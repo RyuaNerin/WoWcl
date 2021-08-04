@@ -106,7 +106,7 @@ end
 
 local wclLogCache = {}
 
-function WoWcl.RenderZone(tooltip, name, realm, role, zone)
+function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
   local db = WoWcl.db[zone]
 
   local cacheName = name .. "-" .. realm
@@ -124,7 +124,9 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
     if not realmData then
       tooltip:AddLine(" ")
       tooltip:AddDoubleLine(format(headerNameOnDetail[4], db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-      tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      if show_version then
+        tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      end
       tooltip:AddLine(" ")
       return
     end
@@ -133,7 +135,9 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
     if not posIndex then
       tooltip:AddLine(" ")
       tooltip:AddDoubleLine(format(headerNameOnDetail[4], db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-      tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      if show_version then
+        tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+      end
       tooltip:AddLine(" ")
       return
     end
@@ -304,7 +308,9 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
       end
     end
   end
-  tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+  if show_version then
+    tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+  end
   tooltip:AddLine(" ")
 end
 
@@ -318,6 +324,6 @@ function WoWcl.Render(tooltip, name, realm, role)
   end
 
   for i, zone in pairs(WoWcl.zoneList) do
-    WoWcl.RenderZone(tooltip, name, realm, role, zone)
+    WoWcl.RenderZone(tooltip, name, realm, role, zone, i == 1)
   end
 end
