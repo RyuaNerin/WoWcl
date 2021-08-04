@@ -7,7 +7,11 @@
 ## X-Website: https://wowcl.ryuar.in/
 ## X-AddonProvider: github
 
-WoWcl.lua
 utils.lua
+WoWcl.lua
 ui.lua
+
+copy_dialog.lua
+copy_link.lua
+
 notice.lua
