@@ -4,7 +4,7 @@ function WoWcl.AddData(db, zone)
     WoWcl.zoneList[#WoWcl.zoneList + 1] = zone
     table.sort(WoWcl.zoneList, function(a, b) return a > b end)
   end
-  
+
   WoWcl.db[zone] = db
 end
 
@@ -70,6 +70,18 @@ local function toInt(data, index, length)
   return value
 end
 
+local function get_score_text(scores)
+  local function fmt(v)
+    return format(
+      "|cff%s%7s|r",
+      getColorHex(v),
+      v < 0 and "-----" or format("%.1f", v)
+    )
+  end
+
+  return format("%s   %s   %s", fmt(scores[1]), fmt(scores[2]), fmt(scores[3]))
+end
+
 ----------------------------------------------------------------------------------------------------
 local function dump(tbl, indent)
   if not indent then indent = 0 end
@@ -106,7 +118,7 @@ end
 
 local wclLogCache = {}
 
-function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
+function WoWcl.RenderZone(tooltip, name, realm, role, zone)
   local db = WoWcl.db[zone]
 
   local cacheName = name .. "-" .. realm
@@ -122,23 +134,13 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
   if not wcl_log then
     local realmData = db.server[realm]
     if not realmData then
-      tooltip:AddLine(" ")
       tooltip:AddDoubleLine(format(headerNameOnDetail[4], db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-      if show_version then
-        tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-      end
-      tooltip:AddLine(" ")
       return
     end
 
     local posIndex = binSearch(realmData, name, 2, #realmData)
     if not posIndex then
-      tooltip:AddLine(" ")
       tooltip:AddDoubleLine(format(headerNameOnDetail[4], db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
-      if show_version then
-        tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-      end
-      tooltip:AddLine(" ")
       return
     end
     posIndex = realmData[1] + posIndex - 2 -- 2 개 빼는 이유 : (lua 배열 인덱스 시작 = 1) and 첫번째 인덱스는 기본 초기위치...
@@ -170,7 +172,6 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
 
   roles = classRoleIndex[wcl_log[1]]
 
-  tooltip:AddLine(" ")
   if IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() then
     ----------------------------------------------------------------------------------------------------
     if IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() then
@@ -242,19 +243,10 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
         wcl_log[startPos + i * 3 + 1],
         wcl_log[startPos + i * 3 + 2],
       }
-      local scores_text = {
-        "- ",
-        "- ",
-        "- ",
-      };
 
-      if scores[1] >= 0 then maxDifficulty = 2; scores_text[1] = format("%.1f", scores[1]) end;
-      if scores[2] >= 0 then maxDifficulty = 3; scores_text[2] = format("%.1f", scores[2]) end;
-      if scores[3] >= 0 then maxDifficulty = 4; scores_text[3] = format("%.1f", scores[3]) end;
-
-      scores_text[1] = format("%7s", scores_text[1])
-      scores_text[2] = format("%7s", scores_text[2])
-      scores_text[3] = format("%7s", scores_text[3])
+      if scores[1] >= 0 then maxDifficulty = 2 end;
+      if scores[2] >= 0 then maxDifficulty = 3 end;
+      if scores[3] >= 0 then maxDifficulty = 4 end;
 
       tooltip:AddDoubleLine(
         (
@@ -266,12 +258,7 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
             db.encounterNames[i]
           )
         ),
-        format(
-          "|cff%s%s|r  |cff%s%s|r  |cff%s%s|r",
-          getColorHex(scores[1]), scores_text[1],
-          getColorHex(scores[2]), scores_text[2],
-          getColorHex(scores[3]), scores_text[3]
-        ),
+        get_score_text(scores),
         1, 1, 1,
         1, 1, 1
       )
@@ -284,34 +271,16 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone, show_version)
           wcl_log[2 + roles[role] * (1 + db.encounterCount) * 3 + 1],
           wcl_log[2 + roles[role] * (1 + db.encounterCount) * 3 + 2],
         }
-        local scores_text = {
-          "- ",
-          "- ",
-          "- ",
-        };
-
-        if scores[1] >= 0 then scores_text[1] = format("%.1f", scores[1]) end;
-        if scores[2] >= 0 then scores_text[2] = format("%.1f", scores[2]) end;
-        if scores[3] >= 0 then scores_text[3] = format("%.1f", scores[3]) end;
 
         tooltip:AddDoubleLine(
           format(headerNameOnDetail[role], db.zoneName),
-          format(
-            "|cff%s%7s|r  |cff%s%7s|r  |cff%s%7s|r",
-            getColorHex(scores[1]), scores_text[1],
-            getColorHex(scores[2]), scores_text[2],
-            getColorHex(scores[3]), scores_text[3]
-          ),
+          get_score_text(scores),
           1, 1, 1,
           1, 1, 1
         )
       end
     end
   end
-  if show_version then
-    tooltip:AddDoubleLine("마지막 업데이트", db.version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
-  end
-  tooltip:AddLine(" ")
 end
 
 function WoWcl.Render(tooltip, name, realm, role)
@@ -323,7 +292,16 @@ function WoWcl.Render(tooltip, name, realm, role)
     return
   end
 
+  tooltip:AddLine(" ")
   for i, zone in pairs(WoWcl.zoneList) do
-    WoWcl.RenderZone(tooltip, name, realm, role, zone, i == 1)
+    WoWcl.RenderZone(tooltip, name, realm, role, zone)
+    tooltip:AddLine(" ")
+  end
+  tooltip:AddDoubleLine("마지막 업데이트", WoWcl.db[WoWcl.zoneList[1]].version, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+  tooltip:AddLine(" ")
+
+  if name == "경력직자택경비원" and realm == "아즈샤라" then
+    tooltip:AddDoubleLine(" ", "|cffF0A30AWoWcl 문의는 귓속말로!|r")
+    tooltip:AddLine(" ")
   end
 end
