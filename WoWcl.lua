@@ -70,7 +70,7 @@ local function toInt(data, index, length)
   return value
 end
 
-local function get_score_text(scores)
+local function getScoreText(scores)
   local function fmt(v)
     return format(
       "|cff%s%7s|r",
@@ -127,11 +127,11 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
     wclLogCache[zone] = {}
   end
 
-  local wcl_log = wclLogCache[zone][cacheName]
+  local wclLog = wclLogCache[zone][cacheName]
 
   local roles
 
-  if not wcl_log then
+  if not wclLog then
     local realmData = db.server[realm]
     if not realmData then
       tooltip:AddDoubleLine(format(headerNameOnDetail[4], db.zoneName), "기록 없음", 1, 1, 1, 0.8, 0.8, 0.8)
@@ -147,30 +147,30 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
 
     local scoreStart = 1 + toInt(db.pos, 1 + posIndex * 3, 3)
 
-    wcl_log = {}
-    wcl_log[1] = toInt(db.score, scoreStart, 1)
+    wclLog = {}
+    wclLog[1] = toInt(db.score, scoreStart, 1)
 
-    roles = classRoleIndex[wcl_log[1]]
+    roles = classRoleIndex[wclLog[1]]
 
     local scoreEnd = scoreStart + (roles[3] + 1) * (1 + db.encounterCount) * 3 * 2
 
-    local wcl_log_index = 2
+    local wclLogIndex = 2
     for i = scoreStart + 1, scoreEnd, 2 do
       local v = toInt(db.score, i, 2)
 
       if v == 0 then
-        wcl_log[wcl_log_index] = -1
+        wclLog[wclLogIndex] = -1
       else
-        wcl_log[wcl_log_index] = (v - 1) / 10.0
+        wclLog[wclLogIndex] = (v - 1) / 10.0
       end
 
-      wcl_log_index = wcl_log_index + 1
+      wclLogIndex = wclLogIndex + 1
     end
 
-    wclLogCache[cacheName] = wcl_log
+    wclLogCache[cacheName] = wclLog
   end
 
-  roles = classRoleIndex[wcl_log[1]]
+  roles = classRoleIndex[wclLog[1]]
 
   if IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() then
     ----------------------------------------------------------------------------------------------------
@@ -191,17 +191,17 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
         { -1, -1, -1, -1 }, -- 딜
       }
 
-      scores[1][2] = wcl_log[2 + roles[1] * (1 + db.encounterCount) * 3 + 0]
-      scores[1][3] = wcl_log[2 + roles[1] * (1 + db.encounterCount) * 3 + 1]
-      scores[1][4] = wcl_log[2 + roles[1] * (1 + db.encounterCount) * 3 + 2]
+      scores[1][2] = wclLog[2 + roles[1] * (1 + db.encounterCount) * 3 + 0]
+      scores[1][3] = wclLog[2 + roles[1] * (1 + db.encounterCount) * 3 + 1]
+      scores[1][4] = wclLog[2 + roles[1] * (1 + db.encounterCount) * 3 + 2]
 
-      scores[2][2] = wcl_log[2 + roles[2] * (1 + db.encounterCount) * 3 + 0]
-      scores[2][3] = wcl_log[2 + roles[2] * (1 + db.encounterCount) * 3 + 1]
-      scores[2][4] = wcl_log[2 + roles[2] * (1 + db.encounterCount) * 3 + 2]
+      scores[2][2] = wclLog[2 + roles[2] * (1 + db.encounterCount) * 3 + 0]
+      scores[2][3] = wclLog[2 + roles[2] * (1 + db.encounterCount) * 3 + 1]
+      scores[2][4] = wclLog[2 + roles[2] * (1 + db.encounterCount) * 3 + 2]
 
-      scores[3][2] = wcl_log[2 + roles[3] * (1 + db.encounterCount) * 3 + 0]
-      scores[3][3] = wcl_log[2 + roles[3] * (1 + db.encounterCount) * 3 + 1]
-      scores[3][4] = wcl_log[2 + roles[3] * (1 + db.encounterCount) * 3 + 2]
+      scores[3][2] = wclLog[2 + roles[3] * (1 + db.encounterCount) * 3 + 0]
+      scores[3][3] = wclLog[2 + roles[3] * (1 + db.encounterCount) * 3 + 1]
+      scores[3][4] = wclLog[2 + roles[3] * (1 + db.encounterCount) * 3 + 2]
 
       if     roles[1] >= 0 and scores[1][3] >= 0 then maxDifficulty[1] = 4
       elseif roles[1] >= 0 and scores[1][2] >= 0 then maxDifficulty[1] = 3
@@ -239,9 +239,9 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
       local maxDifficulty = 1
 
       local scores = {
-        wcl_log[startPos + i * 3 + 0],
-        wcl_log[startPos + i * 3 + 1],
-        wcl_log[startPos + i * 3 + 2],
+        wclLog[startPos + i * 3 + 0],
+        wclLog[startPos + i * 3 + 1],
+        wclLog[startPos + i * 3 + 2],
       }
 
       if scores[1] >= 0 then maxDifficulty = 2 end;
@@ -258,7 +258,7 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
             db.encounterNames[i]
           )
         ),
-        get_score_text(scores),
+        getScoreText(scores),
         1, 1, 1,
         1, 1, 1
       )
@@ -267,14 +267,14 @@ function WoWcl.RenderZone(tooltip, name, realm, role, zone)
     for role = 1, 3 do
       if roles[role] >= 0 then
         local scores = { 
-          wcl_log[2 + roles[role] * (1 + db.encounterCount) * 3 + 0],
-          wcl_log[2 + roles[role] * (1 + db.encounterCount) * 3 + 1],
-          wcl_log[2 + roles[role] * (1 + db.encounterCount) * 3 + 2],
+          wclLog[2 + roles[role] * (1 + db.encounterCount) * 3 + 0],
+          wclLog[2 + roles[role] * (1 + db.encounterCount) * 3 + 1],
+          wclLog[2 + roles[role] * (1 + db.encounterCount) * 3 + 2],
         }
 
         tooltip:AddDoubleLine(
           format(headerNameOnDetail[role], db.zoneName),
-          get_score_text(scores),
+          getScoreText(scores),
           1, 1, 1,
           1, 1, 1
         )
