@@ -1,10 +1,11 @@
 local frame
+local title
 local button
 local scrollFrame
 local editBox
 
 local function Show()
-	frame:SetSize(420, 150)
+	frame:SetSize(420, 190)
 	frame:ClearAllPoints()
 	frame:SetPoint("CENTER", frame:GetParent() or UIParent, "CENTER", 0, 0)
 	frame:Show()
@@ -40,9 +41,17 @@ local function InitFrame()
   })
 
   --------------------------------------------------
+  
+	title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalHugeBlack")
+	title:SetPoint("TOP", 0, -15)
+	title:SetTextColor(1, 1, 1, 1)
+  title:SetText("Ctrl + C 를 눌러 링크를 복사하세요")
+	title:Show()
+
+  --------------------------------------------------
 
   button:SetSize(128, 24)
-  button:SetPoint("BOTTOM", 0, 8)
+  button:SetPoint("BOTTOM", 0, 20)
   button:SetText(OKAY)
 
   button:SetNormalTexture(button:CreateTexture(nil, nil, "DialogButtonNormalTexture"))
@@ -56,9 +65,9 @@ local function InitFrame()
 
   --------------------------------------------------
 
-  editBox:SetPoint("TOP", 0, -20)
+  editBox:SetPoint("TOP", 5, -45)
   editBox:SetMaxLetters(500)
-  editBox:SetSize(380, 90)
+  editBox:SetSize(370, 90)
   editBox:SetFont(ChatFontNormal:GetFont())
   editBox:SetAutoFocus(true)
   editBox:SetMultiLine(true)
