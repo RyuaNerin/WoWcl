@@ -7,6 +7,9 @@
 ## X-Website: https://wowcl.ryuar.in/
 ## X-AddonProvider: github
 
+libs/LibStub/LibStub.lua
+libs/LibDropDownExtension-1.0/LibDropDownExtension.lua
+
 utils.lua
 WoWcl.lua
 ui.lua

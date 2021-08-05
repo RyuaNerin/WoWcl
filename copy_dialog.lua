@@ -4,7 +4,7 @@ local scrollFrame
 local editBox
 
 local function Show()
-	frame:SetSize(400, 150)
+	frame:SetSize(420, 150)
 	frame:ClearAllPoints()
 	frame:SetPoint("CENTER", frame:GetParent() or UIParent, "CENTER", 0, 0)
 	frame:Show()
@@ -30,7 +30,7 @@ local function InitFrame()
     bgFile = "Interface/DialogFrame/UI-DialogBox-Background",
     tile = true,
     edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
-    edgeSize = 16,
+    edgeSize = 32,
     insets = {
       left = 11,
       right = 12,
@@ -58,11 +58,10 @@ local function InitFrame()
 
   editBox:SetPoint("TOP", 0, -20)
   editBox:SetMaxLetters(500)
-  editBox:SetSize(480, 50)
+  editBox:SetSize(380, 90)
   editBox:SetFont(ChatFontNormal:GetFont())
   editBox:SetAutoFocus(true)
-  --editBox:SetMultiLine(true)
-  editBox:Show()
+  editBox:SetMultiLine(true)
   editBox:SetScript("OnEscapePressed", function() Hide() end)
 
   local hideQueued = false
@@ -76,6 +75,7 @@ local function InitFrame()
       Hide()
     end
   end)
+  editBox:Show()
 end
 
 --------------------------------------------------
