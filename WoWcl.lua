@@ -34,10 +34,10 @@ local classRoleIndex = {
 }
 
 local difficultyColorHex = {
-  "666666",
-  "61ff4d",
-  "ff9933",
-  "f2e6c0",
+  "666666", -- 클리어 기록 없음
+  "61ff4d", -- 일반
+  "ff9933", -- 영웅
+  "f2e6c0", -- 신화
 }
 
 local function getColorHex(percentage)
