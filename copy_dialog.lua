@@ -1,7 +1,6 @@
 local frame
 local title
 local button
-local scrollFrame
 local editBox
 
 local function Show()

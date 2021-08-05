@@ -6,7 +6,7 @@ local selectedName, selectedRealm
 
 local unitOptions  = {
   {
-    text = "Wcl 웹 페이지 링크 복사",
+    text = "WarcraftLogs 링크 복사",
     func = function()
       local urlencoding = function(str)
         return str:gsub("([^%w ])", function(c) return string.format("%%%02X", string.byte(c)); end):gsub(" ", "+")
